@@ -13,7 +13,6 @@ WITH TotalUnitsSold AS (
         p.varietal,
 		 -- Sum the quantities sold in Client_Lines and Lines_Anonym
         SUM(TO_NUMBER(NVL(cl.quantity, '0'))) + SUM(NVL(la.quantity, 0)) AS total_units 
-	-- From the Products table
     FROM Products p
 	-- Join with References to link products to sales
     LEFT JOIN References r ON p.product = r.product
@@ -24,7 +23,7 @@ WITH TotalUnitsSold AS (
 	-- Filter sales from the last year  
     WHERE (cl.orderdate BETWEEN ADD_MONTHS(TRUNC(SYSDATE, 'YY'), -12) AND TRUNC(SYSDATE, 'YY'))  
        OR (la.orderdate BETWEEN ADD_MONTHS(TRUNC(SYSDATE, 'YY'), -12) AND TRUNC(SYSDATE, 'YY'))
-    GROUP BY p.varietal  -- Group the results by varietal
+    GROUP BY p.varietal
 ), 
 -- Aggregate sales data by country and varietal, also determine ranking of varietals within each country
 SalesData AS (
@@ -47,7 +46,6 @@ SalesData AS (
                               WHEN cl.country IS NOT NULL THEN cl.country
                               ELSE la.dliv_country
                            END ORDER BY SUM(TO_NUMBER(NVL(cl.quantity, '0'))) + SUM(NVL(la.quantity, 0)) DESC) AS rn
-    -- From the Products table
 	FROM Products p
 	-- Join with References to link products to sales
     LEFT JOIN References r ON p.product = r.product
@@ -66,13 +64,11 @@ SalesData AS (
 -- Determine the potential consumer countries for each varietal based on the 1% total units sold criterion
 PotentialConsumerCountries AS (
     SELECT
-        -- Select the varietal
 		country_sales.varietal,
 		-- Count the number of distinct countries where sales exceed 1% of the total units  
         COUNT(DISTINCT country) AS potential_consumer_countries  
     FROM (
         SELECT
-			-- Select the varietal from Products
             p.varietal,
 			-- Determine the country of the sale  
             CASE  
@@ -81,7 +77,6 @@ PotentialConsumerCountries AS (
             END AS country,
 			-- Sum the total units sold per country
             SUM(TO_NUMBER(NVL(cl.quantity, '0'))) + SUM(NVL(la.quantity, 0)) AS country_total_units  
-        -- From the Products table
 		FROM Products p
 		-- Join with References to link products to sales  
         LEFT JOIN References r ON p.product = r.product
@@ -107,15 +102,10 @@ PotentialConsumerCountries AS (
 )
 -- Final selection of best-selling varietal per country with associated statistics
 SELECT
-	-- Select the country
     sd.country,
- 	-- Select the varietal  
     sd.varietal,
-	-- Select the total number of buyers
     sd.total_buyers,
-	-- Select the total units sold  
     sd.total_units_sold,
-	-- Select the total income generated 
     sd.total_income,
 	-- Calculate the average units sold per reference
     (SELECT AVG(total_quantity)  
