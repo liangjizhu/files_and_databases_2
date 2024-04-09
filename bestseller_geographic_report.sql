@@ -11,7 +11,8 @@ WITH TotalUnitsSold AS (
     SELECT
 		-- Select the varietal from the Products table
         p.varietal,
-		 -- Sum the quantities sold in Client_Lines and Lines_Anonym
+        -- Sum the quantities sold in Client_Lines and Lines_Anonym
+        -- NVL() used to replace NULL values with a specified value
         SUM(TO_NUMBER(NVL(cl.quantity, '0'))) + SUM(NVL(la.quantity, 0)) AS total_units 
     FROM Products p
 	-- Join with References to link products to sales
