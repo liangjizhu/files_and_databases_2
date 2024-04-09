@@ -62,28 +62,6 @@ ORDER BY sale_period DESC;
 
 -- 12 rows selected
 
-SELECT
-    cl.orderdate,
-    TO_NUMBER(cl.quantity) AS quantity,
-    cl.price,
-    'Client' AS source
-FROM Client_Lines cl
-WHERE cl.barcode = 'QIQ79610I616590'
-  AND cl.orderdate >= ADD_MONTHS(LAST_DAY(SYSDATE) + 1, -2)  -- First day of last month
-  AND cl.orderdate < LAST_DAY(SYSDATE) + 1  -- First day of current month
-UNION ALL
-SELECT
-    la.orderdate,
-    TO_NUMBER(la.quantity) AS quantity,
-    la.price,
-    'Anonymous' AS source
-FROM Lines_Anonym la
-WHERE la.barcode = 'QIQ79610I616590'
-  AND la.orderdate >= ADD_MONTHS(LAST_DAY(SYSDATE) + 1, -2)  -- First day of last month
-  AND la.orderdate < LAST_DAY(SYSDATE) + 1  -- First day of current month
-ORDER BY orderdate;
-
-
 -- -- Prepare client sales data for the last month
 -- WITH ClientSales AS (
 --     SELECT
