@@ -82,15 +82,23 @@ SELECT distinct origin FROM Products;
 -- 33 rows selected
 
 -- PROVIDERS
+SELECT * FROM PROVIDERS;
+
 -- PURCHASE_ORDER
 
 -- TABLE_NAME
 -- --------------------------------------------------------------------------------------------------------------------------------
 -- P_REFERENCE
 -- REFERENCES
+SELECT * FROM REFERENCES;
+
 -- REGISTERED
 -- REPLACEMENTS
+SELECT * FROM REPLACEMENTS;
+
 -- REPLACEMENT_ORDER
+SELECT * FROM REPLACEMENT_ORDER;
+
 -- SUPPLIER
 -- SUPPLY_LINES
 SELECT * FROM SUPPLY_LINES;
